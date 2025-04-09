@@ -1,76 +1,71 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const cors = require("cors");
-const bodyParser = require("body-parser");
-const fs = require("fs");
 const { v4: uuidv4 } = require("uuid");
 
 const app = express();
-const PORT = 8080;
-const DATA_FILE = "db.json";
+const PORT = process.env.PORT || 8080;
 
-app.use(cors());
-app.use(
-  cors({
-    origin: "https://ng-crud-full.vercel.app",
-  })
-);
-app.use(bodyParser.json());
+// MongoDB Atlas URI
+const MONGO_URI =
+  "mongodb+srv://Kandhan:Valli@ngcrudfull.srgljky.mongodb.net/my_data?retryWrites=true&w=majorit";
 
-// Utility: Read data
-function readData() {
-  return JSON.parse(fs.readFileSync(DATA_FILE, "utf-8"));
-}
+// Connect to MongoDB
+mongoose
+  .connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log("✅ Connected to MongoDB"))
+  .catch((err) => console.error("❌ MongoDB connection error:", err));
 
-// Utility: Write data
-function writeData(data) {
-  fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
-}
+// Middleware
+app.use(cors({ origin: "https://ng-crud-full.vercel.app" }));
+app.use(express.json());
+
+// Define User schema
+const userSchema = new mongoose.Schema({
+  username: String,
+  name: String,
+  number: String, // stored as string to handle large numbers safely
+  email: String,
+});
+
+const User = mongoose.model("User", userSchema, "users"); // specify "users" collection
+
+// API Routes
 
 // GET all users
-app.get("/users", (req, res) => {
-  const users = readData();
+app.get("/users", async (req, res) => {
+  const users = await User.find();
   res.json(users);
 });
 
-// GET single user
-app.get("/users/:id", (req, res) => {
-  const users = readData();
-  const user = users.find((u) => u.id === req.params.id);
+// GET single user by id
+app.get("/users/:id", async (req, res) => {
+  const user = await User.findOne({ id: req.params.id });
   user ? res.json(user) : res.status(404).send("User not found");
 });
 
 // POST new user
-app.post("/users", (req, res) => {
-  const users = readData();
-  const newUser = { id: uuidv4(), ...req.body };
-  users.push(newUser);
-  writeData(users);
+app.post("/users", async (req, res) => {
+  const newUser = new User({ id: uuidv4(), ...req.body });
+  await newUser.save();
   res.status(201).json(newUser);
 });
 
 // PATCH update user
-app.patch("/users/:id", (req, res) => {
-  let users = readData();
-  const index = users.findIndex((u) => u.id === req.params.id);
-  if (index === -1) return res.status(404).send("User not found");
-
-  users[index] = { ...users[index], ...req.body };
-  writeData(users);
-  res.json(users[index]);
+app.patch("/users/:id", async (req, res) => {
+  const user = await User.findOneAndUpdate({ id: req.params.id }, req.body, {
+    new: true,
+  });
+  user ? res.json(user) : res.status(404).send("User not found");
 });
 
 // DELETE user
-app.delete("/users/:id", (req, res) => {
-  let users = readData();
-  const updatedUsers = users.filter((u) => u.id !== req.params.id);
-  if (users.length === updatedUsers.length)
-    return res.status(404).send("User not found");
-
-  writeData(updatedUsers);
-  res.status(204).send();
+app.delete("/users/:id", async (req, res) => {
+  const result = await User.findOneAndDelete({ id: req.params.id });
+  result ? res.status(204).send() : res.status(404).send("User not found");
 });
 
-// Start server
+// Start the server
 app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
+  console.log(`🚀 Server running at mongoDB at ${PORT}`);
 });

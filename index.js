@@ -8,7 +8,7 @@ const PORT = process.env.PORT || 8080;
 
 // MongoDB Atlas URI
 const MONGO_URI =
-  "mongodb+srv://Kandhan:Valli@ngcrudfull.srgljky.mongodb.net/my_data?retryWrites=true&w=majorit";
+  "mongodb+srv://Kandhan:Valli@ngcrudfull.srgljky.mongodb.net/my_data?retryWrites=true&w=majority";
 
 // Connect to MongoDB
 mongoose
@@ -22,6 +22,7 @@ app.use(express.json());
 
 // Define User schema
 const userSchema = new mongoose.Schema({
+  id:String,
   username: String,
   name: String,
   number: String, // stored as string to handle large numbers safely

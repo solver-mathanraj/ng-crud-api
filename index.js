@@ -9,6 +9,11 @@ const PORT = 8080;
 const DATA_FILE = "db.json";
 
 app.use(cors());
+app.use(
+  cors({
+    origin: "https://ng-crud-full.vercel.app",
+  })
+);
 app.use(bodyParser.json());
 
 // Utility: Read data

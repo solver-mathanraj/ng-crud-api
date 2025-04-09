@@ -1,0 +1,74 @@
+{
+  "users": [
+    {
+      "id": "2",
+      "username": "jane_smith",
+      "name": "Jane Smith",
+      "number": 9123456724,
+      "email": "jane.smith@example.com"
+    },
+    {
+      "id": "3",
+      "username": "mike_jordan",
+      "name": "Mike Jordan",
+      "number": "9001234567",
+      "email": "mike.jordan@example.com"
+    },
+    {
+      "id": "4",
+      "username": "emma_watson",
+      "name": "Emma Watson",
+      "number": "9988776655",
+      "email": "emma.watson@example.com"
+    },
+    {
+      "id": "5",
+      "username": "alex_turner",
+      "name": "Alex Turner",
+      "number": "9112233445",
+      "email": "alex.turner@example.com"
+    },
+    {
+      "id": "6",
+      "username": "lucy_liu",
+      "name": "Lucy Liu",
+      "number": "9090909090",
+      "email": "lucy.liu@example.com"
+    },
+    {
+      "id": "7",
+      "username": "david_kim",
+      "name": "David Kim",
+      "number": "9004567890",
+      "email": "david.kim@example.com"
+    },
+    {
+      "id": "8",
+      "username": "sara_lee",
+      "name": "Sara Lee",
+      "number": "9871234560",
+      "email": "sara.lee@example.com"
+    },
+    {
+      "id": "9",
+      "username": "tom_cruise",
+      "name": "Tom Cruise",
+      "number": "9988665544",
+      "email": "tom.cruise@example.com"
+    },
+    {
+      "id": "10",
+      "username": "nina_dobrev",
+      "name": "Nina Dobrev",
+      "number": "9011223344",
+      "email": "nina.dobrev@example.com"
+    },
+    {
+      "id": "58da",
+      "username": "appanswamy",
+      "name": "nathan",
+      "number": 4235246336,
+      "email": "my@gmail.com"
+    }
+  ]
+}

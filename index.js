@@ -9,6 +9,15 @@ const PORT = process.env.PORT || 8080;
 // MongoDB Atlas URI
 const MONGO_URI =
   "mongodb+srv://Kandhan:Valli@ngcrudfull.srgljky.mongodb.net/my_data?retryWrites=true&w=majority";
+<<<<<<< HEAD
+=======
+
+// Connect to MongoDB
+mongoose
+  .connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log("✅ Connected to MongoDB"))
+  .catch((err) => console.error("❌ MongoDB connection error:", err));
+>>>>>>> a2056c8f27963fd7f1f6e6b04a9c1d0ad37a3ed7
 
 // Middleware
 app.use(
@@ -20,7 +29,11 @@ app.use(express.json());
 
 // Define User schema with `id`
 const userSchema = new mongoose.Schema({
+<<<<<<< HEAD
   id: String,
+=======
+  id:String,
+>>>>>>> a2056c8f27963fd7f1f6e6b04a9c1d0ad37a3ed7
   username: String,
   name: String,
   number: String, // stored as string to handle large numbers safely

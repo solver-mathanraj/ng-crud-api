@@ -18,18 +18,19 @@ app.use(
 );
 app.use(express.json());
 
-// Define User schema with `id`
+// Define User schema
 const userSchema = new mongoose.Schema({
-  id: String,
+  id: { type: String, required: true },
   username: String,
   name: String,
-  number: String, // stored as string to handle large numbers safely
+  number: String, // Storing as string is good for mobile numbers
   email: String,
 });
 
-const User = mongoose.model("User", userSchema, "users"); // specify "users" collection
+// Create User model
+const User = mongoose.model("User", userSchema, "users");
 
-// API Routes
+// Routes
 
 // GET all users
 app.get("/users", async (req, res) => {
@@ -41,8 +42,8 @@ app.get("/users", async (req, res) => {
   }
 });
 
-// GET single user by id
-app.get("/users/:id", async (req, res) => {
+// GET single user by ID
+app.get("/users/:_id", async (req, res) => {
   try {
     const user = await User.findOne({ id: req.params.id });
     user ? res.json(user) : res.status(404).send("User not found");
@@ -63,22 +64,28 @@ app.post("/users", async (req, res) => {
 });
 
 // PATCH update user
-app.patch("/users/:id", async (req, res) => {
+app.patch("/users/:_id", async (req, res) => {
   try {
-    const user = await User.findOneAndUpdate({ id: req.params.id }, req.body, {
-      new: true,
-    });
-    user ? res.json(user) : res.status(404).send("User not found");
+    const updatedUser = await User.findOneAndUpdate(
+      { id: req.params.id },
+      req.body,
+      { new: true }
+    );
+    updatedUser
+      ? res.json(updatedUser)
+      : res.status(404).send("User not found");
   } catch (err) {
     res.status(500).json({ message: "Error updating user", error: err });
   }
 });
 
 // DELETE user
-app.delete("/users/:id", async (req, res) => {
+app.delete("/users/:_id", async (req, res) => {
   try {
-    const result = await User.findOneAndDelete({ id: req.params.id });
-    result ? res.status(204).send() : res.status(404).send("User not found");
+    const deletedUser = await User.findOneAndDelete({ id: req.params.id });
+    deletedUser
+      ? res.status(204).send()
+      : res.status(404).send("User not found");
   } catch (err) {
     res.status(500).json({ message: "Error deleting user", error: err });
   }
@@ -86,11 +93,11 @@ app.delete("/users/:id", async (req, res) => {
 
 // Connect to MongoDB and start server
 mongoose
-  .connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .connect(MONGO_URI)
   .then(() => {
     console.log("✅ Connected to MongoDB");
     app.listen(PORT, () => {
-      console.log(`🚀 Server running at port ${PORT}`);
+      console.log(`🚀 Server running at http://localhost:${PORT}`);
     });
   })
   .catch((err) => {

@@ -4,11 +4,9 @@ const cors = require("cors");
 const { v4: uuidv4 } = require("uuid");
 
 const app = express();
-const PORT = process.env.PORT || 8080;
 
 // MongoDB Atlas URI
-const MONGO_URI =
-  "mongodb+srv://Kandhan:Valli@ngcrudfull.srgljky.mongodb.net/my_data?retryWrites=true&w=majority";
+
 
 // Middleware
 app.use(
@@ -93,11 +91,11 @@ app.delete("/users/:_id", async (req, res) => {
 
 // Connect to MongoDB and start server
 mongoose
-  .connect(MONGO_URI)
+  .connect(process.env.MONGO_URI)
   .then(() => {
     console.log("✅ Connected to MongoDB");
-    app.listen(PORT, () => {
-      console.log(`🚀 Server running at http://localhost:${PORT}`);
+    app.listen(process.env.PORT, () => {
+      console.log(`🚀 Server running at http://localhost:${process.env.PORT}`);
     });
   })
   .catch((err) => {
